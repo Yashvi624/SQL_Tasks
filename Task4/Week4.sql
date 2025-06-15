@@ -61,7 +61,7 @@ CREATE TABLE Allotments (
     PRIMARY KEY (SubjectId, StudentId)
 );
 
--- Table to store students who couldn't be allotted
+
 CREATE TABLE UnallotedStudents (
     StudentId VARCHAR(20) PRIMARY KEY
 );
@@ -71,7 +71,6 @@ GO
 CREATE PROCEDURE AllocateOpenElectives
 AS
 BEGIN
-    -- Clear any previous allocations
     DELETE FROM Allotments;
     DELETE FROM UnallotedStudents;
 
@@ -81,7 +80,6 @@ BEGIN
     DECLARE @RemainingSeats INT;
     DECLARE @Allocated BIT;
 
-    -- Cursor to go through all students in descending GPA
     DECLARE StudentCursor CURSOR FOR
         SELECT StudentId FROM StudentDetails ORDER BY GPA DESC;
 
@@ -91,8 +89,6 @@ BEGIN
     WHILE @@FETCH_STATUS = 0
     BEGIN
         SET @Allocated = 0;
-
-        -- Check preferences from 1 to 5
         SET @Preference = 1;
 
         WHILE @Preference <= 5 AND @Allocated = 0
@@ -109,7 +105,6 @@ BEGIN
 
                 IF @RemainingSeats > 0
                 BEGIN
-                    -- Allocate and update remaining seats
                     INSERT INTO Allotments (SubjectId, StudentId)
                     VALUES (@SubjectId, @StudentId);
 
@@ -123,8 +118,6 @@ BEGIN
 
             SET @Preference = @Preference + 1;
         END
-
-        -- If not allocated to any subject
         IF @Allocated = 0
         BEGIN
             INSERT INTO UnallotedStudents (StudentId)
