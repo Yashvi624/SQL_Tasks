@@ -36,9 +36,6 @@ INSERT INTO Employees (EmployeeID, Name, DepartmentID, Salary) VALUES
 (13, 'William Rodriguez', 3, 105000.00);
 SELECT * FROM Employees;
 
-/* SQL query to find the average salary of employees in each department, along with the
-department name and the number of employees in each department. However, only include
-departments where the average salary is higher than the overall average salary across all departments.*/
 
 SELECT TOP 1 DepartmentName , AVG(Salary) AS AverageSalary , Count(EmployeeID) AS NumberOfEmployees 
 FROM Employees, Departments WHERE Employees.DepartmentID = Departments.DepartmentID  
